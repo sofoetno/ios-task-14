@@ -40,13 +40,19 @@ class Movie {
     var rating: Double
     var image: UIImage
     var IsFavorite: Bool
+    var coverImage: UIImage
+    var description: String
+    var details: [(String, String)]
     
-    init(name: String, genre: String, rating: Double, image: UIImage, IsFavorite: Bool) {
+    init(name: String, genre: String, rating: Double, image: UIImage, IsFavorite: Bool, coverImage: UIImage, description: String, details: [(String, String)]) {
         self.name = name
         self.genre = genre
         self.rating = rating
         self.image = image
         self.IsFavorite = IsFavorite
+        self.coverImage = coverImage
+        self.description = description
+        self.details = details
     }
 }
 
@@ -157,12 +163,55 @@ class ViewController: UIViewController {
 
     private let maincStackView = UIStackView()
     let movies: [Movie] = [
-        Movie(name: "The Batman", genre: "Action", rating: 8.1, image: UIImage(named: "batman")!, IsFavorite: false),
-        Movie(name: "Uncharted", genre: "Advanture", rating: 7.9, image: UIImage(named: "film1")!, IsFavorite: false),
-        Movie(name: "The Exorcism of God", genre: "Horor", rating: 5.6, image: UIImage(named: "film2")!, IsFavorite: false),
-        Movie(name: "Turning Red", genre: "Comedy", rating: 7.1, image: UIImage(named: "film3")!, IsFavorite: false),
-        Movie(name: "Spider-Man: No Way Home", genre: "Action", rating: 8.1, image: UIImage(named: "film4")!, IsFavorite: false),
-        Movie(name: "Morbius", genre: "Action", rating: 5.3, image: UIImage(named: "film5")!, IsFavorite: false),
+        Movie(name: "The Batman", genre: "Action", rating: 8.1, image: UIImage(named: "batman")!, IsFavorite: false, coverImage: UIImage(named: "batmanBoy")!, description: "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
+              details: [
+            ("Certificate", "16+"),
+            ("Runtime", "02:56"),
+            ("Release", "2022"),
+            ("Genre", "Action, Crime, Drama"),
+            ("Director", "Matt Reeves"),
+            ("Cast", "Robert Pattinson, Zoë Kravitz, Jeffrey Wright, Colin Farrell, Paul Dano, John Turturro, Andy Serkis, Peter Sarsgaard"),
+        ]),
+        Movie(name: "Uncharted", genre: "Advanture", rating: 7.9, image: UIImage(named: "film1")!, IsFavorite: false, coverImage: UIImage(named: "film1")!, description: "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.", details: [
+            ("Certificate", "12+"),
+            ("Runtime", "02:30"),
+            ("Release", "2017"),
+            ("Genre", "Comedy, Drama"),
+            ("Director", "Matt Reeves"),
+            ("Cast", "Robert Pattinson, Zoë Kravitz, Jeffrey Wright, Colin Farrell, Paul Dano, John Turturro, Andy Serkis, Peter Sarsgaard"),
+        ]),
+        Movie(name: "The Exorcism of God", genre: "Horor", rating: 5.6, image: UIImage(named: "film2")!, IsFavorite: false, coverImage: UIImage(named: "film2")!, description: "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.", details: [
+            ("Certificate", "8+"),
+            ("Runtime", "02:56"),
+            ("Release", "2022"),
+            ("Genre", "Action, Crime, Drama"),
+            ("Director", "Matt Reeves"),
+            ("Cast", "Robert Pattinson, Zoë Kravitz, Jeffrey Wright, Colin Farrell, Paul Dano, John Turturro, Andy Serkis, Peter Sarsgaard"),
+        ]),
+        Movie(name: "Turning Red", genre: "Comedy", rating: 7.1, image: UIImage(named: "film3")!, IsFavorite: false, coverImage: UIImage(named: "film3")!, description: "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.", details: [
+            ("Certificate", "18+"),
+            ("Runtime", "02:56"),
+            ("Release", "2022"),
+            ("Genre", "Action, Crime, Drama"),
+            ("Director", "Matt Reeves"),
+            ("Cast", "Robert Pattinson, Zoë Kravitz, Jeffrey Wright, Colin Farrell, Paul Dano, John Turturro, Andy Serkis, Peter Sarsgaard"),
+        ]),
+        Movie(name: "Spider-Man: No Way Home", genre: "Action", rating: 8.1, image: UIImage(named: "film4")!, IsFavorite: false, coverImage: UIImage(named: "film4")!, description: "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.", details: [
+            ("Certificate", "15+"),
+            ("Runtime", "02:56"),
+            ("Release", "2022"),
+            ("Genre", "Action, Crime, Drama"),
+            ("Director", "Matt Reeves"),
+            ("Cast", "Robert Pattinson, Zoë Kravitz, Jeffrey Wright, Colin Farrell, Paul Dano, John Turturro, Andy Serkis, Peter Sarsgaard"),
+        ]),
+        Movie(name: "Morbius", genre: "Action", rating: 5.3, image: UIImage(named: "film5")!, IsFavorite: false, coverImage: UIImage(named: "film5")!, description: "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.", details: [
+            ("Certificate", "16+"),
+            ("Runtime", "01:56"),
+            ("Release", "2018"),
+            ("Genre", "Drama"),
+            ("Director", "Matt Reeves"),
+            ("Cast", "Robert Pattinson, Zoë Kravitz, Jeffrey Wright, Colin Farrell, Paul Dano, John Turturro, Andy Serkis, Peter Sarsgaard"),
+        ]),
     ]
     private let maincLabel = UILabel()
     private let topBar = UIStackView()
@@ -273,6 +322,9 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
 extension ViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let newItem = MovieInformationViewController()
+        
+        newItem.movie = movies[indexPath.row]
+        
         self.navigationController?.pushViewController(newItem, animated: true)
         
     }

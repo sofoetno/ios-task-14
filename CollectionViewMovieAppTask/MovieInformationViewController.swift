@@ -12,6 +12,7 @@ class MovieInformationViewController: UIViewController {
     private let detailsStack = UIStackView()
     private let selecTButton = UIButton()
     
+    var movie: Movie?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,28 +40,27 @@ class MovieInformationViewController: UIViewController {
     }
     
     func setupNavigationBar() {
-        let backButton = UIButton()
-        backButton.setImage(UIImage(named: "Back"), for: .normal)
-        
-        let button = UIBarButtonItem(customView: backButton)
-        navigationItem.leftBarButtonItem = button
-        title = "The Batman"
+        title = movie?.name
         
         navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.foregroundColor : UIColor.white,
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18, weight: .bold)
         ]
         
-        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "Back")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "Back"), style: .plain, target: self, action: #selector(backToMain))
+    }
+    
+    @objc func backToMain() {
+        navigationController?.popViewController(animated: true)
     }
     
     func setupMovieImage() {
-        movieImage.image = UIImage(named: "batmanBoy")
+        movieImage.image = movie?.coverImage
         movieImage.contentMode = .scaleAspectFit
         view.addSubview(movieImage)
     }
     
     func setupRatingLabel() {
-        ratingLabel.text = "8.3"
+        ratingLabel.text = "\(movie?.rating ?? 0)"
         ratingLabel.textColor = .white
         ratingLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         view.addSubview(ratingLabel)
@@ -74,7 +74,7 @@ class MovieInformationViewController: UIViewController {
     }
     
     func setupDescriptionLabel() {
-        descriptionLabel.text = "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement."
+        descriptionLabel.text = movie?.description
         descriptionLabel.textColor = .white
         descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.numberOfLines = 0
@@ -83,44 +83,36 @@ class MovieInformationViewController: UIViewController {
     }
     
     func setupDetails() {
-        let details = [
-            ("Certificate", "16+"),
-            ("Runtime", "02:56"),
-            ("Release", "2022"),
-            ("Genre", "Action, Crime, Drama"),
-            ("Director", "Matt Reeves"),
-            ("Cast", "Robert Pattinson, Zoë Kravitz, Jeffrey Wright, Colin Farrell, Paul Dano, John Turturro, Andy Serkis, Peter Sarsgaard"),
-        ]
-        
-        detailsStack.axis = .vertical
-        detailsStack.spacing = 12
-        detailsStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        for detail in details {
-            let label = UILabel()
-            label.text = detail.0
-            label.textColor = UIColor(red: 0.389, green: 0.452, blue: 0.58, alpha: 1)
-            label.font = UIFont.systemFont(ofSize: 14)
-                        
-            let value = UILabel()
-            value.text = detail.1
-            value.textColor = .white
-            value.font = UIFont.systemFont(ofSize: 14)
-            value.lineBreakMode = .byWordWrapping
-            value.numberOfLines = 0
+        if let details = movie?.details {
+            detailsStack.axis = .vertical
+            detailsStack.spacing = 12
+            detailsStack.translatesAutoresizingMaskIntoConstraints = false
             
-            let rowStack = UIStackView(arrangedSubviews: [label, value])
-            rowStack.spacing = 16
-            rowStack.alignment = .top
+            for detail in details {
+                let label = UILabel()
+                label.text = detail.0
+                label.textColor = UIColor(red: 0.389, green: 0.452, blue: 0.58, alpha: 1)
+                label.font = UIFont.systemFont(ofSize: 14)
+                
+                let value = UILabel()
+                value.text = detail.1
+                value.textColor = .white
+                value.font = UIFont.systemFont(ofSize: 14)
+                value.lineBreakMode = .byWordWrapping
+                value.numberOfLines = 0
+                
+                let rowStack = UIStackView(arrangedSubviews: [label, value])
+                rowStack.spacing = 16
+                rowStack.alignment = .top
+                
+                detailsStack.addArrangedSubview(rowStack)
+                
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.widthAnchor.constraint(equalToConstant: 90).isActive = true
+            }
             
-            detailsStack.addArrangedSubview(rowStack)
-            
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.widthAnchor.constraint(equalToConstant: 90).isActive = true
+            view.addSubview(detailsStack)
         }
-        
-        view.addSubview(detailsStack)
-        
     }
     
     func setupSelectButton() {
@@ -157,8 +149,6 @@ class MovieInformationViewController: UIViewController {
             selecTButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             selecTButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             selecTButton.heightAnchor.constraint(equalToConstant: 52)
-            
-            
         ])
     }
 }
